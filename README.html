@@ -62,7 +62,54 @@ img {
 
 
 <p>========= #R-script for Nonparametric Estimation of Local Smoothness for Spatially Inhomogeneous Function</p>
-<p>========= ### Preliminary Steps for Windows user This R-script has been thoroughly tested under Mac OS X 10.10 and Ubuntu 14.04. If you have R for Windows version, youe need to install Rtools <a href="http://cran.r-project.org/bin/windows/Rtools/"><a href="http://nuget.org/nuget.exe" class="uri">http://nuget.org/nuget.exe</a></a> ========= ### Created by Dongik Jang 06/20/2015</p>
+<p>========= ### Preliminary Steps for Windows user * This R-script has been thoroughly tested under Mac OS X 10.10 and Ubuntu 14.04. If you have R for Windows version, you need to install <a href="http://cran.r-project.org/bin/windows/Rtools/">Rtools</a> and compile two Fortran codes. * On the install Rtool, You should check the “Edit the System Path” and add the directory which has <code>R.exe</code> file something like <code>C:\Program Files\R\R-3.2.x\bin\i386;</code> for 32-bit OS (if you use 64-bit os then the last folder may be <code>x64</code>). * After install <code>Rtools</code>, please check the status of system path on the Command Prompt window (<code>CMD</code>). On the <code>CMD</code>, type <code>R</code> then <code>R</code> will be excuted with non-gui mode on the <code>CMD</code>.</p>
+<p>========= ### Compile source codes</p>
+<ul>
+<li><p>For 64-bit OS</p>
+<pre><code>R --arch=x86_64 CMD SHLIB -dynamiclib -O3 -fopenmp localrisk.f90 localfit.f90  -o localmethod64.dll </code></pre></li>
+<li><p>For 32-bit OS</p>
+<pre><code>R --arch=i386 CMD SHLIB -dynamiclib -O3 localrisk.f90 localfit.f90 -o localmethod32.dll</code></pre>
+<pre class="s"><code>path &lt;- &quot;where/the/compiled/dll/file&quot;
+  if(.Platform$r_arch == &quot;x86_64&quot;){
+    dyn.load(paste(path, &quot;localmethod64.dll&quot;, sep=&quot;&quot;))
+  }else{
+    dyn.load(paste(path, &quot;localmethod32.dll&quot;, sep=&quot;&quot;))
+  }</code></pre></li>
+</ul>
+<p>=========</p>
+<div id="an-example" class="section level3">
+<h3>An example</h3>
+<ul>
+<li><p>generate a test set</p>
+<pre class="s"><code>source(&quot;cp_source.R&quot;)   
+library(fields)
+set.seed(3245)
+n &lt;- 800
+x &lt;- sort(runif(n, 0,1))
+xgrid &lt;- seq(0, 1,,1000)
+f4 &lt;- ifelse(x &lt; .5, sin((2*pi*(x+0.0026))^3), -sin((2*pi*(1-x-0.0026))^3))
+fg4 &lt;- ifelse(xgrid &lt; .5, sin((2*pi*(xgrid+0.0026))^3), -sin((2*pi*(1-xgrid-0.0026))^3))
+snr &lt;- 5
+sdf4 &lt;- sd(f4)
+y4 &lt;- f4 + rnorm(length(f4), 0, sdf4/snr)
+bdx &lt;- c(-rev(x[x &lt; 0.2]), x, rev(2-x[x &gt; 0.8]))
+f4 &lt;- c(rev(f4[x &lt; 0.2]), f4, rev(f4[x &gt; 0.8]))
+y4 &lt;- c(rev(y4[x &lt; 0.2]), y4, rev(y4[x &gt; 0.8]))
+x &lt;- bdx
+test4 &lt;- list(x=x, y=y4, f=f4)</code></pre></li>
+<li><p>pilot estimation</p>
+<pre class="s"><code>pilot4 &lt;- pilotQV(test4$x, test4$y)
+lambda.grid4 &lt;- pilot4$lambda.grid
+nh &lt;- length(lambda.grid1)</code></pre></li>
+<li><p>update pilot estimation</p>
+<pre class="s"><code>newx &lt;- seq(0,1,,300)
+rval &lt;- 0.05
+ptm &lt;- proc.time()
+out4 &lt;- improve_local(pilot4, newx, rval, sparameter=0.1^7, boundary=&quot;none&quot;)
+proc.time() - ptm</code></pre></li>
+</ul>
+<p>========= ### Created by Dongik Jang 06/20/2015</p>
+</div>
 
 
 </div>

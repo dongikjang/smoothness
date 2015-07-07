@@ -10,8 +10,8 @@
  
 =========
 ### Compile source codes 
+
  * For 64-bit OS
- 
 	``` 
 R --arch=x86_64 CMD SHLIB -dynamiclib -O3 -fopenmp localrisk.f90 localfit.f90  -o localmethod64.dll 
 	```
@@ -31,46 +31,43 @@ R --arch=i386 CMD SHLIB -dynamiclib -O3 localrisk.f90 localfit.f90 -o localmetho
 	```
 	
 =========
-### An example
 
- * generate a test set	
-	```S
+### An example
+* generate a test set
+```S
 source("cp_source.R")	
 library(fields)
-
 set.seed(3245)
 n <- 800
 x <- sort(runif(n, 0,1))
 xgrid <- seq(0, 1,,1000)
 f4 <- ifelse(x < .5, sin((2*pi*(x+0.0026))^3), -sin((2*pi*(1-x-0.0026))^3))
 fg4 <- ifelse(xgrid < .5, sin((2*pi*(xgrid+0.0026))^3), -sin((2*pi*(1-xgrid-0.0026))^3))
-
 snr <- 5
 sdf4 <- sd(f4)
 y4 <- f4 + rnorm(length(f4), 0, sdf4/snr)
-
 bdx <- c(-rev(x[x < 0.2]), x, rev(2-x[x > 0.8]))
 f4 <- c(rev(f4[x < 0.2]), f4, rev(f4[x > 0.8]))
 y4 <- c(rev(y4[x < 0.2]), y4, rev(y4[x > 0.8]))
 x <- bdx
 test4 <- list(x=x, y=y4, f=f4)
-	```
+```
 	
- *  pilot estimation
-	```S
+* pilot estimation
+```S
 pilot4 <- pilotQV(test4$x, test4$y)
 lambda.grid4 <- pilot4$lambda.grid
 nh <- length(lambda.grid1)
-	```
+```
 	
- *  update pilot estimation
-	```S
+* update pilot estimation
+```S
 newx <- seq(0,1,,300)
 rval <- 0.05
 ptm <- proc.time()
 out4 <- improve_local(pilot4, newx, rval, sparameter=0.1^7, boundary="none")
 proc.time() - ptm
-  ```
+```
 	
 =========
 ### Created by Dongik Jang 06/20/2015 
