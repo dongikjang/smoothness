@@ -21,7 +21,7 @@ R --arch=i386 CMD SHLIB -dynamiclib -O3 localrisk.f90 localfit.f90 -o localmetho
 	```
 
 
-	```	
+	```S
 	path <- "where/the/compiled/dll/file"
   if(.Platform$r_arch == "x86_64"){
         dyn.load(paste(path, "localmethod64.dll", sep=""))
@@ -34,7 +34,7 @@ R --arch=i386 CMD SHLIB -dynamiclib -O3 localrisk.f90 localfit.f90 -o localmetho
 ### An example
 
  * generate a teset set	
-	```
+	```S
 source("cp_source.R")	
 library(fields)
 
@@ -57,14 +57,14 @@ test4 <- list(x=x, y=y4, f=f4)
 	```
 	
  *  pilot estimation
-	```
+	```S
 pilot4 <- pilotQV(test4$x, test4$y)
 lambda.grid4 <- pilot4$lambda.grid
 nh <- length(lambda.grid1)
 	```
 	
  *  update pilot estimation
-	```
+	```S
 newx <- seq(0,1,,300)
 rval <- 0.05
 ptm <- proc.time()
