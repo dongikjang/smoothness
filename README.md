@@ -22,9 +22,9 @@ R --arch=i386 CMD SHLIB -dynamiclib -O3 localrisk.f90 localfit.f90 -o localmetho
 	```	
 	path <- "where/the/compiled/dll/file"
   if(.Platform$r_arch == "x86_64"){
-      dyn.load(paste(path, "localmethod64.dll", sep=""))
+        dyn.load(paste(path, "localmethod64.dll", sep=""))
   }else{
-      dyn.load(paste(path, "localmethod32.dll", sep=""))
+        dyn.load(paste(path, "localmethod32.dll", sep=""))
   }
 	```
 	
