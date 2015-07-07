@@ -9,6 +9,7 @@
   * After install `Rtools`, please check the status of system path on the Command Prompt window (`CMD`). On the `CMD`, type `R` then `R` will be excuted with non-gui mode on the `CMD`.
   
  * For 64-bit OS
+ 
 	``` 
 R --arch=x86_64 CMD SHLIB -dynamiclib -O3 -fopenmp localrisk.f90 localfit.f90  -o localmethod64.dll 
 	```
@@ -23,8 +24,8 @@ R --arch=i386 CMD SHLIB -dynamiclib -O3 localrisk.f90 localfit.f90 -o localmetho
   if(.Platform$r_arch == "x86_64"){
       dyn.load(paste(path, "localmethod64.dll", sep=""))
   }else{
-    dyn.load(paste(path, "localmethod32.dll", sep=""))
-
+      dyn.load(paste(path, "localmethod32.dll", sep=""))
+  }
 	```
 	
 =========
