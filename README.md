@@ -20,7 +20,7 @@ R --arch=x86_64 CMD SHLIB -dynamiclib -O3 -fopenmp localrisk.f90 localfit.f90  -
 R --arch=i386 CMD SHLIB -dynamiclib -O3 localrisk.f90 localfit.f90 -o localmethod32.dll
 	```
 
- * On the R	
+
 	```	
 	path <- "where/the/compiled/dll/file"
   if(.Platform$r_arch == "x86_64"){
@@ -33,6 +33,7 @@ R --arch=i386 CMD SHLIB -dynamiclib -O3 localrisk.f90 localfit.f90 -o localmetho
 =========
 ### An example
 
+ * generate a teset set	
 	```
 source("cp_source.R")	
 library(fields)
@@ -53,13 +54,17 @@ f4 <- c(rev(f4[x < 0.2]), f4, rev(f4[x > 0.8]))
 y4 <- c(rev(y4[x < 0.2]), y4, rev(y4[x > 0.8]))
 x <- bdx
 test4 <- list(x=x, y=y4, f=f4)
-
-
+	```
+	
+ *  pilot estimation
+	```
 pilot4 <- pilotQV(test4$x, test4$y)
 lambda.grid4 <- pilot4$lambda.grid
 nh <- length(lambda.grid1)
-
-
+	```
+	
+ *  update pilot estimation
+	```
 newx <- seq(0,1,,300)
 rval <- 0.05
 ptm <- proc.time()
