@@ -33,7 +33,7 @@ R --arch=i386 CMD SHLIB -dynamiclib -O3 localrisk.f90 localfit.f90 -o localmetho
 =========
 ### An example
 
- * generate a teset set	
+ * generate a test set	
 	```S
 source("cp_source.R")	
 library(fields)
