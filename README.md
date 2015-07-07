@@ -36,7 +36,6 @@ R --arch=i386 CMD SHLIB -dynamiclib -O3 localrisk.f90 localfit.f90 -o localmetho
 source("cp_source.R")	
 library(fields)
 
-# generate a test set
 set.seed(3245)
 n <- 800
 x <- sort(runif(n, 0,1))
@@ -55,12 +54,11 @@ x <- bdx
 test4 <- list(x=x, y=y4, f=f4)
 
 
-# pilot estimation 
 pilot4 <- pilotQV(test4$x, test4$y)
 lambda.grid4 <- pilot4$lambda.grid
 nh <- length(lambda.grid1)
 
-# update the pilot estimation
+
 newx <- seq(0,1,,300)
 rval <- 0.05
 ptm <- proc.time()
